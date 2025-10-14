@@ -18,6 +18,20 @@ document.addEventListener("DOMContentLoaded", function () {
         terms: document.querySelector("#terms-error"),
     };
 
+    const accountTypeSelect = document.querySelector("#id_account_type");
+    
+    function preSelectAccountType() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const selectedType = urlParams.get('account_type'); 
+        
+        if (selectedType && accountTypeSelect) {
+            if (selectedType === 'applicant' || selectedType === 'employer') {
+                accountTypeSelect.value = selectedType;
+            }
+        }
+    }
+    preSelectAccountType();
+
     function validateFirstName() {
         const value = firstName.value.trim();
         errors.firstName.textContent = value.length < 2 ? "First name must be at least 2 characters." : "";

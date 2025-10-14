@@ -16,8 +16,20 @@
         <div class="logo">JobConnect</div>
         <div class="user-actions">
             {% block user_actions %}
-                {% if not user.is_authenticated %}
-                    <a href="#" class="login">Login</a> 
+                {% if user.is_authenticated %}
+                    <div class="authenticated-controls">
+                        <a href="#" class="notification-bell">
+                            <i class="fas fa-bell"></i>
+                        </a>
+                        <div class="user-profile">
+                            <img src="{{ user.profile.image.url|default:'/static/img/default-avatar.png' }}" alt="Profile Picture">
+                            <!-- <span class="welcome">{{ user.first_name|default:user.username }}</span> -->
+                        </div>
+                        
+                        <!-- <a href="{% url 'accounts:logout' %}" class="logout">Logout</a> -->
+                    </div>
+                {% else %}
+                    <a href="{% url 'accounts:login' %}" class="login">Login</a> 
                     <a href="{% url 'accounts:register' %}" class="register-btn">Sign Up</a>
                 {% endif %}
             {% endblock %}
@@ -26,7 +38,7 @@
     {% if messages %}
         <div class="messages-container">
             {% for message in messages %}
-                <div class="alert {% if message.tags %}alert-{{ message.tags }}{% endif %}">
+                <div class="{% if 'error' in message.tags or 'danger' in message.tags %}alert error-message{% else %}alert{% endif %}">
                     {{ message }}
                 </div>
             {% endfor %}

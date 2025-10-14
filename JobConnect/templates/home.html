@@ -225,12 +225,12 @@
             <div class="cta-card candidate-cta">
                 <h3>Become a Candidate</h3>
                 <p>Register and explore thousands of job opportunities.</p>
-                <a href="#" class="cta-btn light">Register Now <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'accounts:register' %}?account_type=applicant" class="cta-btn light">Register Now <i class="fas fa-arrow-right"></i></a>
             </div>
             <div class="cta-card employer-cta">
                 <h3>Become an Employer</h3>
                 <p>Post your job vacancies and hire the best talent.</p>
-                <a href="#" class="cta-btn dark">Register Now <i class="fas fa-arrow-right"></i></a>
+                <a href="{% url 'accounts:register' %}?account_type=employer" class="cta-btn dark">Register Now <i class="fas fa-arrow-right"></i></a>
             </div>
         </section>
     </div> 
