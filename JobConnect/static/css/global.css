@@ -131,3 +131,17 @@ hr {
     color: var(--bg-white);
 }
 
+
+.alert.error-message {
+    background-color: var(--secondary-color); 
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.alert.error-message p {
+    margin: 0;
+    font-weight: 500;
+}
