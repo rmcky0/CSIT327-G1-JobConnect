@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Applicant Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-content-wrapper">
+    <h2>Welcome, {{ user.first_name|default:user.email }}</h2>
+    <p>This is a temporary applicant dashboard.</p>
+    <p><a href="{% url 'accounts:logout' %}" class="login">Logout</a></p>
+    <hr>
+    <p>Your user type: <strong>{{ user.user_type|capfirst }}</strong></p>
+</div>
+{% endblock %}
+
+
