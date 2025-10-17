@@ -1,5 +1,16 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.core.validators import MinLengthValidator, FileExtensionValidator
+import os
+
+def resume_upload_path(instance, filename):
+    """
+    Generates a unique path for resume files: resumes/resume_{user_id}.ext
+    """
+    ext = os.path.splitext(filename)[1]
+    new_filename = f'resume_{instance.user.id}{ext}'
+    return os.path.join('applicant_resumes', new_filename)
+
 
 class User(AbstractUser):
     email = models.EmailField(unique=True, blank=False)
@@ -47,15 +58,68 @@ class ApplicantProfile(models.Model):
     )
     
     image = models.ImageField(
-        upload_to='applicant_avatars/', 
-        default='default-avatar.png', 
+        upload_to='profile_images/applicant/', 
+        default='defaults/default-avatar.png', 
         null=True, 
         blank=True
     )
+    setup_step_progress = models.IntegerField(default=1)
+    
+    # Step 1: Personal Info
+    contact_number = models.CharField(
+        max_length=15, 
+        validators=[MinLengthValidator(10, message="Contact number must be at least 10 digits.")],
+        blank=True
+    )
+    location = models.CharField(
+        max_length=255, 
+        help_text="e.g., Cebu City, Philippines",
+        blank=True
+    )
+
+    # Step 2: Education
+    school_name = models.CharField(max_length=255, blank=True)
+    degree = models.CharField(max_length=255, help_text="e.g., BS in Information Technology", blank=True)
+    year_level = models.CharField(max_length=50, help_text="e.g., 3rd Year, Graduate", blank=True)
+
+    # Step 3: Skills & Resume
+    skills_summary = models.TextField(
+        blank=True, 
+        help_text="Comma-separated list of your key skills."
+    )
+    resume = models.FileField(
+        upload_to='applicant_documents/resumes/',
+        validators=[
+            FileExtensionValidator(allowed_extensions=['pdf', 'doc', 'docx'])
+        ],
+        help_text="PDF, DOC, or DOCX only. Max 5MB.",
+        blank=True,
+        null=True
+    )
+
+    # Profile Metadata
+    profile_completeness = models.IntegerField(default=0)
+    is_public = models.BooleanField(default=True, help_text="Allow employers to view your profile.")
+    
+    def calculate_completeness(self):
+        """Calculates and updates the profile completion percentage."""
+        total_fields = 6 # contact, location, school, degree, year, resume
+        filled_fields = 0
+        
+        if self.contact_number: filled_fields += 1
+        if self.location: filled_fields += 1
+        if self.school_name: filled_fields += 1
+        if self.degree: filled_fields += 1
+        if self.year_level: filled_fields += 1
+        if self.resume: filled_fields += 1
+            
+        self.profile_completeness = int((filled_fields / total_fields) * 100)
+        self.save(update_fields=['profile_completeness'])
     
     def __str__(self):
         return f"Applicant Profile for {self.user.email}"
 
+# ... (Your EmployerProfile model remains unchanged) ...
 class EmployerProfile(models.Model):
     user = models.OneToOneField(
         User, 
@@ -78,12 +142,12 @@ class EmployerProfile(models.Model):
         ('tech', 'Technology'), 
         ('finance', 'Finance'), 
         ('health', 'Healthcare'),
-        ('retail', 'Retail'),               # Added
-        ('manu', 'Manufacturing'),          # Added
-        ('edu', 'Education'),               # Added
-        ('nonprofit', 'Non-Profit'),        # Added
-        ('construction', 'Construction'),   # Added
-        ('other', 'Other'),                 # Added
+        ('retail', 'Retail'),
+        ('manu', 'Manufacturing'),
+        ('edu', 'Education'),
+        ('nonprofit', 'Non-Profit'),
+        ('construction', 'Construction'),
+        ('other', 'Other'),
     ]
     TEAM_SIZE_CHOICES = [
         ('1-10', '1-10 Employees'), ('11-50', '11-50 Employees'), ('51+', '51+ Employees')
