@@ -89,16 +89,20 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     password2.addEventListener("input", validatePassword2);
     terms.addEventListener("change", validateTerms);
-
+    
     document.querySelectorAll(".password-toggle").forEach(toggle => {
         toggle.addEventListener("click", function () {
-            const input = this.previousElementSibling;
-            if (input.type === "password") {
+            const parentContainer = this.closest('.password-field'); 
+            const input = parentContainer.querySelector('input'); 
+
+            if (input && input.type === "password") {
                 input.type = "text";
-                this.classList.add("active");
-            } else {
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
+            } else if (input) {
                 input.type = "password";
-                this.classList.remove("active");
+                this.classList.remove("fa-eye-slash");
+                this.classList.add("fa-eye");
             }
         });
     });

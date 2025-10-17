@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-    const form = document.querySelector("form"); 
+    const form = document.querySelector("#login-form"); 
 
     const usernameField = document.querySelector("#id_username"); 
     const passwordField = document.querySelector("#id_password");
@@ -47,16 +47,19 @@ document.addEventListener("DOMContentLoaded", function () {
         passwordField.addEventListener("input", validatePassword);
     }
     
-    document.querySelectorAll(".password-toggle").forEach(toggle => {
+     document.querySelectorAll(".password-toggle").forEach(toggle => {
         toggle.addEventListener("click", function () {
-            const input = this.previousElementSibling; 
-            
-            if (input.type === "password") {
+            const parentContainer = this.closest('.password-field'); 
+            const input = parentContainer.querySelector('input'); 
+
+            if (input && input.type === "password") {
                 input.type = "text";
-                this.classList.replace("fa-eye", "fa-eye-slash"); 
-            } else {
+                this.classList.remove("fa-eye");
+                this.classList.add("fa-eye-slash");
+            } else if (input) {
                 input.type = "password";
-                this.classList.replace("fa-eye-slash", "fa-eye");
+                this.classList.remove("fa-eye-slash");
+                this.classList.add("fa-eye");
             }
         });
     });

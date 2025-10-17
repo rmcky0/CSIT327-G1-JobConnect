@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/login.css' %}">
+<link rel="stylesheet" href="{% static 'css/accounts/login.css' %}">
 {% endblock %}
 
 {% block title %}JobConnect - Sign In{% endblock %}
@@ -31,7 +31,7 @@
             </div>
         {% endif %}
 
-        <form method="post" action="{% url 'accounts:login' %}">{% csrf_token %}
+        <form method="post" action="{% url 'accounts:login' %}" id="login-form">{% csrf_token %}
             
             <div class="field-container">
                 {{ form.username }} 
