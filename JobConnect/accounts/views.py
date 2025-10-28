@@ -9,6 +9,13 @@ def get_user_dashboard_url(user):
     return 'dashboard:dashboard'
 
 
+def home(request):
+    """Home page view that redirects authenticated users to their dashboard"""
+    if request.user.is_authenticated:
+        return redirect(get_user_dashboard_url(request.user))
+    return render(request, 'home.html')
+
+
 def register(request):
     if request.user.is_authenticated:
         return redirect(get_user_dashboard_url(request.user)) 
