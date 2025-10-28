@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", function () {
     const form = document.querySelector("#registration-form");
 
-    const firstName = document.querySelector("#id_first_name");
-    const lastName = document.querySelector("#id_last_name");
+    const fullName = document.querySelector("#id_full_name");
+    const username = document.querySelector("#id_username");
     const email = document.querySelector("#id_email");
     const password1 = document.querySelector("#id_password1");
     const password2 = document.querySelector("#id_password2");
@@ -10,8 +10,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const submitBtn = document.querySelector(".register-submit");
 
     const errors = {
-        firstName: document.querySelector("#first-name-error"),
-        lastName: document.querySelector("#last-name-error"),
+        fullName: document.querySelector("#full-name-error"),
+        username: document.querySelector("#username-error"),
         email: document.querySelector("#email-error"),
         password1: document.querySelector("#password1-error"),
         password2: document.querySelector("#password2-error"),
@@ -32,16 +32,24 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     preSelectAccountType();
 
-    function validateFirstName() {
-        const value = firstName.value.trim();
-        errors.firstName.textContent = value.length < 2 ? "First name must be at least 2 characters." : "";
-        return !errors.firstName.textContent;
+    function validateFullName() {
+        const value = fullName.value.trim();
+        errors.fullName.textContent = value.length < 2 ? "Full name must be at least 2 characters." : "";
+        return !errors.fullName.textContent;
     }
 
-    function validateLastName() {
-        const value = lastName.value.trim();
-        errors.lastName.textContent = value.length < 2 ? "Last name must be at least 2 characters." : "";
-        return !errors.lastName.textContent;
+    function validateUsername() {
+        const value = username.value.trim();
+        if (value.length < 3) {
+            errors.username.textContent = "Username must be at least 3 characters.";
+            return false;
+        }
+        if (!/^[a-zA-Z0-9_]+$/.test(value)) {
+            errors.username.textContent = "Username can only contain letters, numbers, and underscores.";
+            return false;
+        }
+        errors.username.textContent = "";
+        return true;
     }
 
     function validateEmail() {
@@ -80,8 +88,8 @@ document.addEventListener("DOMContentLoaded", function () {
         return terms.checked;
     }
 
-    firstName.addEventListener("input", validateFirstName);
-    lastName.addEventListener("input", validateLastName);
+    fullName.addEventListener("input", validateFullName);
+    username.addEventListener("input", validateUsername);
     email.addEventListener("input", validateEmail);
     password1.addEventListener("input", () => {
         validatePassword1();
@@ -109,8 +117,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     form.addEventListener("submit", function (e) {
         const valid =
-            validateFirstName() &&
-            validateLastName() &&
+            validateFullName() &&
+            validateUsername() &&
             validateEmail() &&
             validatePassword1() &&
             validatePassword2() &&
