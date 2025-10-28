@@ -103,15 +103,3 @@ def user_logout(request):
     logout(request)
     messages.success(request, "You have been logged out.")
     return redirect('home')
-
-# --- Applicant Dashboard (temporary) ---
-def applicant_dashboard(request):
-    if not request.user.is_authenticated:
-        return redirect('accounts:login')
-    return render(request, 'accounts/applicant_dashboard.html')
-
-# --- Employer Dashboard (temporary) ---
-def employer_dashboard(request):
-    if not request.user.is_authenticated:
-        return redirect('accounts:login')
-    return render(request, 'accounts/employer_dashboard.html')
