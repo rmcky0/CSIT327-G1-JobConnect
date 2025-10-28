@@ -14,19 +14,22 @@ class ApplicantRegistrationForm(UserCreationForm):
             'class': 'form-control'
         })
     )
-    first_name = forms.CharField(
+    full_name = forms.CharField(
         required=True,
+        max_length=300,
         widget=forms.TextInput(attrs={
-            'placeholder': 'First name',
+            'placeholder': 'Full name',
             'class': 'form-control'
         })
     )
-    last_name = forms.CharField(
+    username = forms.CharField(
         required=True,
+        max_length=150,
         widget=forms.TextInput(attrs={
-            'placeholder': 'Last name',
+            'placeholder': 'Username',
             'class': 'form-control'
-        })
+        }),
+        help_text='Username cannot be changed after registration.'
     )
     password1 = forms.CharField(
         label="Password",
@@ -53,25 +56,32 @@ class ApplicantRegistrationForm(UserCreationForm):
     class Meta:
         model = User
         fields = [
-            'first_name',
-            'last_name',
+            'full_name',
+            'username',
             'email',
             'password1',
             'password2',
             'account_type',
         ]
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # Remove the default 'username' field which is often redundant when using email
-        if 'username' in self.fields:
-            del self.fields['username']
+    def clean_username(self):
+        """Ensure username is unique."""
+        username = self.cleaned_data.get('username')
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError('This username is already taken.')
+        return username
 
     def save(self, commit=True):
         """Create either a Applicant or Employer user with their profile."""
         user = super().save(commit=False)
-        user.username = self.cleaned_data['email']
+        
+        # Set username from the form
+        user.username = self.cleaned_data['username']
         user.email = self.cleaned_data['email']
+        
+        # Parse full name and set first_name and last_name
+        user.set_name_from_full_name(self.cleaned_data['full_name'])
+        
         # Use the value from the cleaned data, defaulting to 'applicant' if not provided
         user.user_type = self.cleaned_data.get('account_type', 'applicant') 
 
@@ -80,9 +90,19 @@ class ApplicantRegistrationForm(UserCreationForm):
 
             # Create profile depending on user type
             if user.user_type == 'applicant':
-                ApplicantProfile.objects.create(user=user)
+                # Initialize ApplicantProfile with parsed names
+                ApplicantProfile.objects.create(
+                    user=user,
+                    first_name=user.first_name,
+                    last_name=user.last_name
+                )
             elif user.user_type == 'employer':
-                EmployerProfile.objects.create(user=user)
+                # Initialize EmployerProfile with parsed names
+                EmployerProfile.objects.create(
+                    user=user,
+                    first_name=user.first_name,
+                    last_name=user.last_name
+                )
 
         return user
 

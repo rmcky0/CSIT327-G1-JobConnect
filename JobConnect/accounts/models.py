@@ -14,6 +14,7 @@ def resume_upload_path(instance, filename):
 
 class User(AbstractUser):
     email = models.EmailField(unique=True, blank=False)
+    middle_name = models.CharField(max_length=150, blank=True, default='')
     
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['first_name', 'last_name', 'username']
@@ -31,6 +32,18 @@ class User(AbstractUser):
         default='applicant',
         verbose_name='User Type'
     )
+    
+    @property
+    def full_name(self):
+        """Returns the full name combining first, middle, and last name."""
+        parts = [self.first_name, self.middle_name, self.last_name]
+        return ' '.join(part for part in parts if part)
+    
+    def set_name_from_full_name(self, full_name):
+        """Parse full name and set first_name and last_name."""
+        parts = full_name.strip().split(None, 1)  # Split on first space
+        self.first_name = parts[0] if parts else ''
+        self.last_name = parts[1] if len(parts) > 1 else ''
     
     @property
     def profile(self):
@@ -66,6 +79,11 @@ class ApplicantProfile(models.Model):
     setup_step_progress = models.IntegerField(default=1)
     
     # Step 1: Personal Info
+    # Name fields (editable during profile setup)
+    first_name = models.CharField(max_length=150, blank=True, default='')
+    middle_name = models.CharField(max_length=150, blank=True, default='')
+    last_name = models.CharField(max_length=150, blank=True, default='')
+    
     contact_number = models.CharField(
         max_length=15, 
         validators=[MinLengthValidator(10, message="Contact number must be at least 10 digits.")],
@@ -129,6 +147,11 @@ class EmployerProfile(models.Model):
     )
     
     # --- Step 1: Company Info (Existing Fields) ---
+    # Name fields (editable during profile setup)
+    first_name = models.CharField(max_length=150, blank=True, default='')
+    middle_name = models.CharField(max_length=150, blank=True, default='')
+    last_name = models.CharField(max_length=150, blank=True, default='')
+    
     company_name = models.CharField(max_length=255, blank=True, null=True)
     about_us = models.TextField(blank=True, null=True)
     logo = models.ImageField(upload_to='employer_documents/logos/', blank=True, null=True)

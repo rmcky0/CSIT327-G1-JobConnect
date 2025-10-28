@@ -5,8 +5,20 @@ from accounts.models import ApplicantProfile # Correctly import from your accoun
 class PersonalInfoForm(forms.ModelForm):
     class Meta:
         model = ApplicantProfile
-        fields = ['contact_number', 'location']
+        fields = ['first_name', 'middle_name', 'last_name', 'contact_number', 'location']
         widgets = {
+            'first_name': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'e.g., Juan'
+            }),
+            'middle_name': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'e.g., Santos (Optional)'
+            }),
+            'last_name': forms.TextInput(attrs={
+                'class': 'form-control', 
+                'placeholder': 'e.g., Dela Cruz'
+            }),
             'contact_number': forms.TextInput(attrs={
                 'class': 'form-control', 
                 'placeholder': 'e.g., 09123456789'
@@ -15,6 +27,13 @@ class PersonalInfoForm(forms.ModelForm):
                 'class': 'form-control', 
                 'placeholder': 'e.g., Cebu City, PH'
             }),
+        }
+        labels = {
+            'first_name': 'First Name',
+            'middle_name': 'Middle Name (Optional)',
+            'last_name': 'Last Name',
+            'contact_number': 'Contact Number (10+ digits)',
+            'location': 'Current Location (City, Country)'
         }
 
 # Form for Step 2: Education Details
