@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'accounts',
     'employer_profile',
     'applicant_profile',
+    'dashboard',
     'storages',
 ]
 

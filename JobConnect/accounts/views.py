@@ -6,10 +6,7 @@ from .forms import ApplicantRegistrationForm, UserLoginForm, EmployerRegistratio
 
 
 def get_user_dashboard_url(user):
-    if user.user_type == 'employer':
-        return 'accounts:employer_dashboard'
-    else: 
-        return 'accounts:applicant_dashboard'
+    return 'dashboard:dashboard'
 
 
 def register(request):
