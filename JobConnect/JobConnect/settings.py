@@ -58,7 +58,7 @@ DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 AWS_ACCESS_KEY_ID = os.getenv('SUPABASE_S3_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('SUPABASE_S3_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('SUPABASE_BUCKET_NAME')
-AWS_S3_ENDPOINT_URL = f"https://{os.getenv('SUPABASE_PROJECT_ID')}.supabase.co/storage/v1"
+AWS_S3_ENDPOINT_URL = f"https://{os.getenv('SUPABASE_PROJECT_ID')}.supabase.co/storage/v1/s3"
 
 AWS_S3_CUSTOM_DOMAIN = f"{os.getenv('SUPABASE_PROJECT_ID')}.supabase.co/storage/v1/object/public/{os.getenv('SUPABASE_BUCKET_NAME')}"
 AWS_S3_REGION_NAME = "ap-southeast-1" 
