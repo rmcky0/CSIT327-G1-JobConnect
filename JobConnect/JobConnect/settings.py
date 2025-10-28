@@ -104,9 +104,13 @@ DATABASES = {
     'default': dj_database_url.config(
         default="sqlite:///db.sqlite3",
         conn_max_age=600,
-        ssl_require=True
+        conn_health_checks=True,
+        ssl_require=True,
     )
 }
+
+# Close database connections after each request to avoid pooling issues
+DATABASES['default']['CONN_MAX_AGE'] = 0
 
 
 # Password validation
