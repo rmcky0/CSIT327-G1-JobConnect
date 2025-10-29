@@ -23,10 +23,10 @@ load_dotenv(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-4$yng36u3&b7dfko++vcvyyv2hwxadi-pc4#^nhqx^@qjv*&%7'
+SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fallback-key-change-in-production')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv('DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '.onrender.com']
 
@@ -54,16 +54,14 @@ INSTALLED_APPS = [
     'storages',
 ]
 
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage' 
-
 AWS_ACCESS_KEY_ID = os.getenv('SUPABASE_S3_ACCESS_KEY')
 AWS_SECRET_ACCESS_KEY = os.getenv('SUPABASE_S3_SECRET_KEY')
 AWS_STORAGE_BUCKET_NAME = os.getenv('SUPABASE_BUCKET_NAME')
 AWS_S3_ENDPOINT_URL = f"https://{os.getenv('SUPABASE_PROJECT_ID')}.supabase.co/storage/v1/s3"
-
 AWS_S3_CUSTOM_DOMAIN = f"{os.getenv('SUPABASE_PROJECT_ID')}.supabase.co/storage/v1/object/public/{os.getenv('SUPABASE_BUCKET_NAME')}"
-AWS_S3_REGION_NAME = "ap-southeast-1" 
-AWS_DEFAULT_ACL = 'public-read'
+
+AWS_S3_REGION_NAME = os.getenv('AWS_S3_REGION_NAME', 'ap-southeast-1')
+AWS_DEFAULT_ACL = os.getenv('AWS_DEFAULT_ACL', 'public-read')
 AWS_QUERYSTRING_AUTH = False
 AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}
 
@@ -98,9 +96,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'JobConnect.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     'default': dj_database_url.config(
         default="sqlite:///db.sqlite3",
@@ -110,12 +105,7 @@ DATABASES = {
     )
 }
 
-# Close database connections after each request to avoid pooling issues
 DATABASES['default']['CONN_MAX_AGE'] = 0
-
-
-# Password validation
-# https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -132,10 +122,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/5.2/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -144,22 +130,15 @@ USE_I18N = True
 
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'accounts.User'  
+AUTH_USER_MODEL = 'accounts.User'
 
 
 STORAGES = {
