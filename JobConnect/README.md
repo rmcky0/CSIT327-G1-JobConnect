@@ -15,7 +15,7 @@ JobConnect is a web-based platform that connects students and recent graduates w
 
 ### 🧱 Prerequisites
 - Python 3.11 or above  
-- Django 5.x  
+- Django 4.x  
 - Supabase project (with session pooler)  
 - Git installed  
 
@@ -45,6 +45,11 @@ JobConnect is a web-based platform that connects students and recent graduates w
    SUPABASE_URL=https://abewsixrnjnfrlhotyvu.supabase.co
    SUPABASE_KEY=<your-supabase-key>
    DEBUG=True
+
+   SUPABASE_S3_ACCESS_KEY=<storage-access-key>
+   SUPABASE_S3_SECRET_KEY=<storage-secret-key>
+   SUPABASE_BUCKET_NAME=jobconnect-media
+   SUPABASE_PROJECT_ID=abewsixrnjnfrlhotyvu
    ```
 
 5. **Apply migrations**
