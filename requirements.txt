@@ -1,4 +1,4 @@
-Django==5.2.7
+Django==4.2.25
 dj-database-url==3.0.1
 django-storages==1.14.6
 boto3==1.40.54
