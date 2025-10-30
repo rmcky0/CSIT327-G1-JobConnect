@@ -28,3 +28,7 @@ urlpatterns = [
     path('applicant/', include('applicant_profile.urls')),
     path('dashboard/', include('dashboard.urls')),
 ]
+
+# Serve static files in development (media files are in Supabase S3 bucket)
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
