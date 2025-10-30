@@ -147,7 +147,8 @@ class EmployerProfile(models.Model):
     )
     
     # --- Step 1: Company Info (Existing Fields) ---
-    # Name fields (editable during profile setup)
+    # DEPRECATED: Name fields are not used for employer profiles (company_name is used instead)
+    # Kept for backwards compatibility - can be removed in future migration
     first_name = models.CharField(max_length=150, blank=True, default='')
     middle_name = models.CharField(max_length=150, blank=True, default='')
     last_name = models.CharField(max_length=150, blank=True, default='')

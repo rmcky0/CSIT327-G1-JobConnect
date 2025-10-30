@@ -95,40 +95,22 @@
         </div>
         <hr>
         <div class="form-section-card">
-            <h2>Personal Information</h2>
+            <h2>Account Information</h2>
             
             <div class="input-group-row">
                 {# Username (Read-only from User model) #}
                 <div class="field-container">
-                    <label>Username</label>
+                    <label>Account Username</label>
                     <input type="text" value="{{ user.username }}" class="form-control" readonly style="background-color: #f0f0f0; cursor: not-allowed;">
-                    <small class="form-text text-muted">Username cannot be changed</small>
-                </div>
-            </div>
-            
-            <div class="input-group-row">
-                {# First Name, Middle Name, Last Name #}
-                <div class="field-container">
-                    <label for="{{ form.first_name.id_for_label }}">{{ form.first_name.label }}</label>
-                    {{ form.first_name }}
-                    {% if form.first_name.errors %}<div class="error-text">{{ form.first_name.errors.0 }}</div>{% endif %}
-                </div>
-                <div class="field-container">
-                    <label for="{{ form.middle_name.id_for_label }}">{{ form.middle_name.label }}</label>
-                    {{ form.middle_name }}
-                    {% if form.middle_name.errors %}<div class="error-text">{{ form.middle_name.errors.0 }}</div>{% endif %}
-                </div>
-                <div class="field-container">
-                    <label for="{{ form.last_name.id_for_label }}">{{ form.last_name.label }}</label>
-                    {{ form.last_name }}
-                    {% if form.last_name.errors %}<div class="error-text">{{ form.last_name.errors.0 }}</div>{% endif %}
+                    <small class="form-text text-muted">This is your login username and cannot be changed</small>
                 </div>
             </div>
         </div>
         <hr>
         <div class="form-section-card">
-            <h2>Company name</h2>
+            <h2>Company Name</h2>
             <div class="field-container">
+                <label for="{{ form.company_name.id_for_label }}">{{ form.company_name.label }}</label>
                 {{ form.company_name }} 
                 {% if form.company_name.errors %}<div class="error-text">{{ form.company_name.errors }}</div>{% endif %}
             </div>
