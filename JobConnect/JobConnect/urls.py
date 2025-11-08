@@ -29,6 +29,9 @@ urlpatterns = [
     path('dashboard/', include('dashboard.urls')),
 ]
 
-# Serve static files in development (media files are in Supabase S3 bucket)
+# Serve static files in development
+# In development, Django serves from STATICFILES_DIRS (static/) directly
+# In production, files are collected to STATIC_ROOT (staticfiles/) via collectstatic
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+    urlpatterns += staticfiles_urlpatterns()
