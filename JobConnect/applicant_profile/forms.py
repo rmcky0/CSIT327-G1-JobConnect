@@ -1,8 +1,14 @@
 from django import forms
-from accounts.models import ApplicantProfile # Correctly import from your accounts app
+from accounts.models import ApplicantProfile 
 
 # Form for Step 1: Personal Information
 class PersonalInfoForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+       
+        if 'image' in self.fields:
+            self.fields['image'].required = False
+    
     class Meta:
         model = ApplicantProfile
         fields = ['first_name', 'middle_name', 'last_name', 'contact_number', 'location']
